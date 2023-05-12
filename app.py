@@ -48,3 +48,15 @@ def ingre_delete(id):
         return redirect('/ingredientes')
     except:
         return("Error eliminado ingrediente")
+    
+@app.route("/busqueda", methods=['POST', 'GET'])
+def busqueda():
+    if request.method == 'POST':
+        search = request.form['buscar']
+        ingredientes = db.session.query(Ingredientes).filter(Ingredientes.name.ilike(f"%{search}%")).all()
+        try:
+            return render_template('busqueda.html', ingredientes=ingredientes)
+        except:
+            return("Error al buscar un ingrediente")
+    else:   
+        return render_template('busqueda.html')
