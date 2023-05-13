@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class = "container">
+        <form action="/pedidos" METHOD="POST">
+            <tbody>
+                <select name="bocadillo" id="bocadillo" multiple>
+                {% for bocadillo in bocadillos %}
+                    <option value="{{ bocadillo.id }}">{{ bocadillo.name }}</option>
+                {% endfor %}
+            </select>
+            </tbody>
+            <input type = "submit" value="Añadir pedido">
+        </form>
+    </div>
+    <div class = "container">
+        <table>
+            <thead>
+              <tr>
+                <th>Fecha de creación</th>
+                <th>Bocadillos</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for pedido in pedidos %}
+                <tr>
+                    <td>{{ pedido.date_created }}</td>
+                    {% for a in pedido.bocadillos.values() %}
+                        <td>{{ a }}</td>
+                    {% endfor %}
+                    <td><a href="/pedidos/delete/{{ pedido.id }}" class= "btn btn-outline-danger btn-sm">Eliminar</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          
+
+    </div>
+</body>
+</html>
