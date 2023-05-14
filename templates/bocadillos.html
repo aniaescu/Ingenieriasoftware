@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
+    <h2>Añadir nuevo bocadillo</h2>
     <form action="/bocadillos" METHOD="POST">
         <input type="text" placeholder="Nombre" name="nombre">
         <input type="text" placeholder="Precio" name="precio">
@@ -14,6 +15,13 @@
         <input type="submit" value="Añadir bocadillo">
     </form>
     <br></br>
+</div>
+<div class="container">
+    <h2>Bocadillos</h2>
+    <form name="formSearch" method="POST" action="{{ url_for('busqueda_bocadillo')}}">
+        <input type="text" id="buscador" name="buscador" autocomplete="on">
+        <button type="submit">Buscar</button>
+    </form>
 </div>
 <div class="container">
     <table>
@@ -38,6 +46,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not bocadillos: %}
+        No se encuentran resultados similares.
+    {% endif %}
     <br></br>
     <a href='/index'><button>Atrás</button></a>
 

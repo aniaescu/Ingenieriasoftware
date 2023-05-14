@@ -90,7 +90,7 @@ def bocadillos():
     else:
         bocadillos = Bocadillos.query.order_by(Bocadillos.id)  
         ingredientes = Ingredientes.query.order_by(Ingredientes.id)
-        return render_template('bocadillo.html', bocadillos=bocadillos, ingredientes=ingredientes)
+        return render_template('bocadillos.html', bocadillos=bocadillos, ingredientes=ingredientes)
     
 @app.route("/pedidos", methods=['POST', 'GET'])
 def pedidos():
@@ -112,11 +112,11 @@ def pedidos():
     else:
         bocadillos = Bocadillos.query.order_by(Bocadillos.id)  
         pedidos = Pedidos.query.order_by(Pedidos.id)
-        return render_template('pedido.html', bocadillos=bocadillos, pedidos=pedidos)
+        return render_template('pedidos.html', bocadillos=bocadillos, pedidos=pedidos)
     
 @app.route("/pedido", methods=['POST', 'GET'])
 def pr():
-    return render_template('pedido.html', bocadillos=None, pedidos=None)
+    return render_template('pedidos.html', bocadillos=None, pedidos=None)
 
 
 @app.route("/ingredientes/delete/<int:id>")
@@ -240,9 +240,44 @@ def busqueda():
         items = Bocadillos.query.order_by(Bocadillos.id)    
         return render_template('index.html', items=items)
 
+@app.route("/busqueda-ingrediente", methods=['POST', 'GET'])
+def busqueda_ingrediente():
+    if request.method == 'POST':
+        search = request.form['buscador']
+        ingredientes = db.session.query(Ingredientes).filter(Ingredientes.name.ilike(f"%{search}%")).all()
+        if not ingredientes:
+            nombres_ingredientes = [i.name for i in db.session.query(Ingredientes).all()]
+            palabras_similares = similitud_palabras(search, nombres_ingredientes)
+            ingredientes = [ingrediente for ingrediente in db.session.query(Ingredientes).all() if ingrediente.name in palabras_similares]
+        try:
+            return render_template('ingredientes.html', ingredientes=ingredientes)
+        except:
+            return("Error al buscar un ingrediente")
+    else:
+        ingredientes = Bocadillos.query.order_by(Bocadillos.id)    
+        return render_template('ingredientes.html', ingredientes=ingredientes)
+    
+
+@app.route("/busqueda-bocadillo", methods=['POST', 'GET'])
+def busqueda_bocadillo():
+    if request.method == 'POST':
+        search = request.form['buscador']
+        bocadillos = db.session.query(Bocadillos).filter(Bocadillos.name.ilike(f"%{search}%")).all()
+        if not bocadillos:
+            nombres_bocadillos = [b.name for b in db.session.query(Bocadillos).all()]
+            palabras_similares = similitud_palabras(search, nombres_bocadillos)
+            bocadillos = [bocadillo for bocadillo in db.session.query(Bocadillos).all() if bocadillo.name in palabras_similares]
+        try:
+            return render_template('bocadillos.html', bocadillos=bocadillos)
+        except:
+            return("Error al buscar un ingrediente")
+    else:
+        bocadillos = Bocadillos.query.order_by(Bocadillos.id)    
+        return render_template('bocadillos.html', bocadillos=bocadillos)
+
 def similitud_palabras(palabra, lista_palabras, umbral=0.6):
     palabra = palabra.lower()
     lista_palabras_lower = [p.lower() for p in lista_palabras]
     palabras_similares_lower = difflib.get_close_matches(palabra, lista_palabras_lower, n=100, cutoff=umbral)
     palabras_similares = [lista_palabras[i] for i, pal in enumerate(lista_palabras_lower) if pal.lower() in palabras_similares_lower]
-    return palabras_similares
+    return palabras_similares 
