@@ -2,6 +2,7 @@ import os
 import pathlib
 import google
 import requests
+import difflib
 from flask import Flask, render_template, request, redirect, abort, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.mutable import MutableDict
@@ -208,7 +209,40 @@ def logout():
     session.clear()
     return redirect("/")
 
-@app.route("/index")
+@app.route("/index", methods=['GET'])
 @login_is_required
 def index():
-    return render_template("index.html")
+    items = Bocadillos.query.order_by(Bocadillos.id)    
+    return render_template('index.html', items=items)
+
+@app.route("/busqueda", methods=['POST', 'GET'])
+def busqueda():
+    if request.method == 'POST':
+        search = request.form['buscador']
+        seleccion = request.form['select']
+        if seleccion == "ingredientes":
+            items = db.session.query(Ingredientes).filter(Ingredientes.name.ilike(f"%{search}%")).all()
+            if not items:
+                nombres_ingredientes = [i.name for i in db.session.query(Ingredientes).all()]
+                palabras_similares = similitud_palabras(search, nombres_ingredientes)
+                items = [ingrediente for ingrediente in db.session.query(Ingredientes).all() if ingrediente.name in palabras_similares]
+        elif seleccion == "bocadillos":
+            items = db.session.query(Bocadillos).filter(Bocadillos.name.ilike(f"%{search}%")).all()
+            if not items:
+                nombres_bocadillos = [b.name for b in db.session.query(Bocadillos).all()]
+                palabras_similares = similitud_palabras(search, nombres_bocadillos)
+                items = [bocadillo for bocadillo in db.session.query(Bocadillos).all() if bocadillo.name in palabras_similares]
+        try:
+            return render_template('index.html', items=items)
+        except:
+            return("Error al buscar un ingrediente")
+    else:   
+        items = Bocadillos.query.order_by(Bocadillos.id)    
+        return render_template('index.html', items=items)
+
+def similitud_palabras(palabra, lista_palabras, umbral=0.6):
+    palabra = palabra.lower()
+    lista_palabras_lower = [p.lower() for p in lista_palabras]
+    palabras_similares_lower = difflib.get_close_matches(palabra, lista_palabras_lower, n=100, cutoff=umbral)
+    palabras_similares = [lista_palabras[i] for i, pal in enumerate(lista_palabras_lower) if pal.lower() in palabras_similares_lower]
+    return palabras_similares

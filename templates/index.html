@@ -5,4 +5,23 @@
     <a href='/ingredientes'><button>Añadir ingrediente</button></a>
     <a href='/pedidos'><button>Crear pedido</button></a>
 </div>
+<div class="container">
+    <form name="formSearch" method="POST" action="{{ url_for('busqueda')}}">
+        <input type="text" id="buscador" name="buscador" autocomplete="on">
+        <select name="select" class="select">
+            <option value="bocadillos">Bocadillos</option>
+            <option value="ingredientes">Ingredientes</option>
+        </select>
+        <button type="submit">Buscar</button>
+    </form>
+</div>
+<div class="container">        
+    <div class = "items">
+        <ul class="list">
+        {% for item in items %}
+            <li class="articulo">{{ item.name }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endblock %}
