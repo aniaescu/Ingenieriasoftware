@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-
+import difflib
 
 app = Flask(__name__, template_folder='./templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bocaware.db'
@@ -52,11 +52,24 @@ def ingre_delete(id):
 @app.route("/busqueda", methods=['POST', 'GET'])
 def busqueda():
     if request.method == 'POST':
-        search = request.form['buscar']
-        ingredientes = db.session.query(Ingredientes).filter(Ingredientes.name.ilike(f"%{search}%")).all()
+        search = request.form['buscador']
+        items = db.session.query(Ingredientes).filter(Ingredientes.name.ilike(f"%{search}%")).all()
+        if not items:
+            all_ingredient_names = [ingredient.name for ingredient in db.session.query(Ingredientes).all()]
+            similar_words = similitud_palabras(search, all_ingredient_names)
+            items = [ingrediente for ingrediente in db.session.query(Ingredientes).all() if ingrediente.name in similar_words]
         try:
-            return render_template('busqueda.html', ingredientes=ingredientes)
+            return render_template('busqueda.html', items=items)
         except:
             return("Error al buscar un ingrediente")
     else:   
-        return render_template('busqueda.html')
+        items = Ingredientes.query.order_by(Ingredientes.id)    
+        return render_template('busqueda.html', items=items)
+
+    
+def similitud_palabras(palabra, lista_palabras, umbral=0.6):
+    palabra = palabra.lower()
+    lista_palabras_lower = [p.lower() for p in lista_palabras]
+    palabras_similares_lower = difflib.get_close_matches(palabra, lista_palabras_lower, n=100, cutoff=umbral)
+    palabras_similares = [lista_palabras[i] for i, pal in enumerate(lista_palabras_lower) if pal.lower() in palabras_similares_lower]
+    return palabras_similares
