@@ -1,51 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class = "container">
-        <form action="/bocadillos" METHOD="POST">
-            <input type="text" placeholder="Nombre" name="nombre">
-            <input type="text" placeholder="Precio" name="precio">
-            <tbody>
-                <select name="ingrediente" id="ingrediente" multiple>
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <form action="/bocadillos" METHOD="POST">
+        <input type="text" placeholder="Nombre" name="nombre">
+        <input type="text" placeholder="Precio" name="precio">
+        <tbody>
+            <select name="ingrediente" id="ingrediente" multiple>
                 {% for ingrediente in ingredientes %}
-<!--                        <label><input type="checkbox" value="{{ ingrediente.id }}"> {{ ingrediente.name }}</label>-->
-                    <option value="{{ ingrediente.id }}">{{ ingrediente.name }}</option>
+                <option value="{{ ingrediente.id }}">{{ ingrediente.name }}</option>
                 {% endfor %}
             </select>
-            </tbody>
-            <input type = "submit" value="Añadir bocadillo">
-        </form>
-    </div>
-    <div class = "container">
-        <table>
-            <thead>
-              <tr>
+        </tbody>
+        <input type="submit" value="Añadir bocadillo">
+    </form>
+    <br></br>
+</div>
+<div class="container">
+    <table>
+        <thead>
+            <tr>
                 <th>Nombre</th>
                 <th>Precio</th>
                 <th>Ingredientes</th>
-              </tr>
-            </thead>
-            <tbody>
+            </tr>
+        </thead>
+        <tbody>
             {% for bocadillo in bocadillos %}
-                <tr>
-                    <td>{{ bocadillo.name }}</td>
-                    <td>{{ bocadillo.precio }}</td>
-                    {% for a in bocadillo.ingrediente.values() %}
-                        <td>{{ a }}</td>
-                    {% endfor %}
-                    <td><a href="/bocadillos/delete/{{ bocadillo.id }}" class= "btn btn-outline-danger btn-sm">Eliminar</a></td>
-                </tr>
+            <tr>
+                <td>{{ bocadillo.name }}</td>
+                <td>{{ bocadillo.precio }}</td>
+                {% for a in bocadillo.ingrediente.values() %}
+                <td>{{ a }}</td>
+                {% endfor %}
+                <td><a href="/bocadillos/delete/{{ bocadillo.id }}" class="btn btn-outline-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
             {% endfor %}
-            </tbody>
-          </table>
-          
+        </tbody>
+    </table>
+    <br></br>
+    <a href='/index'><button>Atrás</button></a>
 
-    </div>
-</body>
-</html>
+</div>
+
+{% endblock %}

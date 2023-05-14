@@ -1,39 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class = "container">
-        <form action="/ingredientes" METHOD="POST">
-            <input type="text" placeholder="Nombre" name="nombre">
-            <input type="text" placeholder="Alergenos" name="alergenos">
-            <input type = "submit" value="Añadir ingrediente">
-        </form>
-    </div>
-    <div class = "container">
-        <table>
-            <thead>
-              <tr>
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <form action="/ingredientes" METHOD="POST">
+        <input type="text" placeholder="Nombre" name="nombre">
+        <input type="text" placeholder="Alergenos" name="alergenos">
+        <input type="submit" value="Añadir ingrediente">
+    </form>
+    <br></br>
+</div>
+<div class="container">
+    <table>
+        <thead>
+            <tr>
                 <th>Nombre</th>
                 <th>Alergenos</th>
-              </tr>
-            </thead>
-            <tbody>
+            </tr>
+        </thead>
+        <tbody>
             {% for ingrediente in ingredientes %}
-                <tr>
-                    <td>{{ ingrediente.name }}</td>
-                    <td>{{ ingrediente.alergico }}</td>
-                    <td><a href="/ingredientes/delete/{{ ingrediente.id }}" class= "btn btn-outline-danger btn-sm">Eliminar</a></td>
-                </tr>
+            <tr>
+                <td>{{ ingrediente.name }}</td>
+                <td>{{ ingrediente.alergico }}</td>
+                <td><a href="/ingredientes/delete/{{ ingrediente.id }}"
+                        class="btn btn-outline-danger btn-sm">Eliminar</a></td>
+            </tr>
             {% endfor %}
-            </tbody>
-          </table>
-          
+        </tbody>
+    </table>
+    <br></br>
+    <a href='/index'><button>Atrás</button></a>
 
-    </div>
-</body>
-</html>
+</div>
+{% endblock %}
