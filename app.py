@@ -13,7 +13,7 @@ from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 
 
-app = Flask(__name__, template_folder='./templates')
+app = Flask(__name__, template_folder='./templates', static_folder='./static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bocaware.db'
 #Initialize db
 db = SQLAlchemy(app)

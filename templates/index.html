@@ -1,26 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-<div>
-    <a href='/bocadillos'><button>Añadir bocadillo</button></a>
-    <a href='/ingredientes'><button>Añadir ingrediente</button></a>
-    <a href='/pedidos'><button>Crear pedido</button></a>
+<div class="div_boton_index">
+    <a href='/bocadillos'><button class="boton">Añadir bocadillo</button></a>
+    <a href='/ingredientes'><button class="boton">Añadir ingrediente</button></a>
+    <a href='/pedidos'><button class="boton">Crear pedido</button></a>
+    <br></br>
 </div>
-<div class="container">
+<div>
     <form name="formSearch" method="POST" action="{{ url_for('busqueda')}}">
-        <input type="text" id="buscador" name="buscador" autocomplete="on">
+        <input type="text" id="caja_texto" name="buscador" autocomplete="on">
         <select name="select" class="select">
             <option value="bocadillos">Bocadillos</option>
             <option value="ingredientes">Ingredientes</option>
         </select>
-        <button type="submit">Buscar</button>
+        <button type="submit" class="boton">Buscar</button>
     </form>
 </div>
-<div class="container">        
-    <div class = "items">
-        <ul class="list">
-        {% for item in items %}
-            <li class="articulo">{{ item.name }}</li>
-        {% endfor %}
+<div>
+    <div>
+        <ul>
+            {% for item in items %}
+            <li>{{ item.name }}</li>
+            {% endfor %}
         </ul>
     </div>
 </div>

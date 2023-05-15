@@ -5,18 +5,32 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./static/base.css">
     <title>Document</title>
 </head>
 
 <body>
-    <div>
-        <p>Hola {{session['name']}}!</p>
-        <a href='/'><button>Logout</button></a>
-        <br></br>
+    <div class="div_usuario">
+        <div class="texto_boton_usuario">
+            <p>Hola {{session['name']}}!</p>
+            <div class="div_boton_logout">
+                <a href='/'><button class="boton">Logout</button></a>
+                <br></br>
+            </div>
+        </div>
     </div>
 
     {% block content %}
     {% endblock %}
+
+    <footer>
+        <p>Autor:
+        <p><a href="mailto:ania.escudero@opendeusto.es" class="boton">Ania Escudero</a></p>
+        <p><a href="mailto:leyre.guerra@opendeusto.es" class="boton">Leyre Guerra</a></p>
+        <p><a href="mailto:unaiarevalo@opendeusto.es" class="boton">Unai Arévalo</a></p>
+        <p><a href="mailto:unai.chasco@opendeusto.es" class="boton">Unai Chasco</a></p>
+        </p>
+    </footer>
 </body>
 
 </html>

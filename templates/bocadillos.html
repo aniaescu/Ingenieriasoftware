@@ -1,29 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-    <h2>Añadir nuevo bocadillo</h2>
+<div>
+    <h2 class="titulo">Añadir nuevo bocadillo</h2>
     <form action="/bocadillos" METHOD="POST">
-        <input type="text" placeholder="Nombre" name="nombre">
-        <input type="text" placeholder="Precio" name="precio">
+        <input type="text" placeholder="Nombre" name="nombre" id="caja_texto">
+        <input type="text" placeholder="Precio" name="precio" id="caja_texto">
         <tbody>
-            <select name="ingrediente" id="ingrediente" multiple>
+            <select name="ingrediente" multiple class="select_multiple">
                 {% for ingrediente in ingredientes %}
                 <option value="{{ ingrediente.id }}">{{ ingrediente.name }}</option>
                 {% endfor %}
             </select>
         </tbody>
-        <input type="submit" value="Añadir bocadillo">
+        <input type="submit" class="boton" value="Añadir bocadillo">
     </form>
     <br></br>
 </div>
-<div class="container">
-    <h2>Bocadillos</h2>
+
+<div>
+    <h2 class="titulo">Bocadillos</h2>
     <form name="formSearch" method="POST" action="{{ url_for('busqueda_bocadillo')}}">
-        <input type="text" id="buscador" name="buscador" autocomplete="on">
-        <button type="submit">Buscar</button>
+        <input type="text" id="caja_texto" name="buscador" autocomplete="on">
+        <button type="submit" class="boton">Buscar</button>
     </form>
 </div>
-<div class="container">
+
+<div>
     <table>
         <thead>
             <tr>
@@ -32,6 +34,7 @@
                 <th>Ingredientes</th>
             </tr>
         </thead>
+        <br></br>
         <tbody>
             {% for bocadillo in bocadillos %}
             <tr>
@@ -40,18 +43,17 @@
                 {% for a in bocadillo.ingrediente.values() %}
                 <td>{{ a }}</td>
                 {% endfor %}
-                <td><a href="/bocadillos/delete/{{ bocadillo.id }}" class="btn btn-outline-danger btn-sm">Eliminar</a>
+                <td><a href="/bocadillos/delete/{{ bocadillo.id }}" class="boton">Eliminar</a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% if not bocadillos: %}
-        No se encuentran resultados similares.
+    No se encuentran resultados similares.
     {% endif %}
     <br></br>
-    <a href='/index'><button>Atrás</button></a>
-
+    <a href='/index'><button class="boton">Atrás</button></a>
 </div>
 
 {% endblock %}

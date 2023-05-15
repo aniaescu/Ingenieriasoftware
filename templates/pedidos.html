@@ -1,21 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-    <h2>Crear nuevo pedido</h2>
+<div>
+    <h2 class="titulo">Crear nuevo pedido</h2>
     <form action="/pedidos" METHOD="POST">
         <tbody>
-            <select name="bocadillo" id="bocadillo" multiple>
+            <select name="bocadillo" multiple class="select_multiple">
                 {% for bocadillo in bocadillos %}
                 <option value="{{ bocadillo.id }}">{{ bocadillo.name }}</option>
                 {% endfor %}
             </select>
         </tbody>
-        <input type="submit" value="Añadir pedido">
+        <input type="submit" value="Añadir pedido" class="boton">
     </form>
     <br></br>
 </div>
-<div class="container">
-    <h2>Pedidos</h2>
+
+<div>
+    <h2 class="titulo">Pedidos</h2>
     <table>
         <thead>
             <tr>
@@ -30,13 +31,13 @@
                 {% for a in pedido.bocadillos.values() %}
                 <td>{{ a }}</td>
                 {% endfor %}
-                <td><a href="/pedidos/delete/{{ pedido.id }}" class="btn btn-outline-danger btn-sm">Eliminar</a></td>
+                <td><a href="/pedidos/delete/{{ pedido.id }}" class="boton">Eliminar</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     <br></br>
-    <a href='/index'><button>Atrás</button></a>
+    <a href='/index'><button class="boton">Atrás</button></a>
 
 </div>
 {% endblock %}
