@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="contenido_principal">
+    <a href='/ingredientes'><button class="boton">Atrás</button></a>
+    <h1>Modificar ingrediente</h1>
+    <form action="/ingredientes/modify/{{ ingredientes_to_modify.id }}" METHOD="POST">
+        <input type="text" placeholder="Nombre" name="name" name='name' value="{{ ingredientes_to_modify.name }}" id="caja_texto">
+        <input type="text" placeholder="Alergenos" name="alergenos" alergenos="alergenos" value="{{ ingredientes_to_modify.alergico }}" id="caja_texto">
+        <input type="submit" value="Modificar" class="boton"> 
+    </form>
+    <br></br>
+</div>
+
+{% endblock %}

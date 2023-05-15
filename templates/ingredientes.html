@@ -31,6 +31,7 @@
         <tbody>
             {% for ingrediente in ingredientes %}
             <tr>
+                <td><a href="/ingredientes/modify/{{ ingrediente.id }}" class="boton">Modificar</a></td>
                 <td><a href="/ingredientes/delete/{{ ingrediente.id }}" class="boton">Eliminar</a></td>
                 <td>{{ ingrediente.name }}</td>
                 <td>{{ ingrediente.alergico }}</td>

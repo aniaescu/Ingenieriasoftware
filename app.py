@@ -296,3 +296,21 @@ def similitud_palabras(palabra, lista_palabras, umbral=0.6):
     palabras_similares_lower = difflib.get_close_matches(palabra, lista_palabras_lower, n=100, cutoff=umbral)
     palabras_similares = [lista_palabras[i] for i, pal in enumerate(lista_palabras_lower) if pal.lower() in palabras_similares_lower]
     return palabras_similares 
+
+
+# Route that modify ingredientes
+@app.route("/ingredientes/modify/<int:id>", methods=['POST', 'GET'])
+def ingredientes_modify(id):
+    ingredientes_to_modify=Ingredientes.query.get_or_404(id)
+    if request.method == 'POST':
+        ingredientes_to_modify.name = request.form['name']
+        ingredientes_to_modify.alergico = request.form['alergenos']
+        try:
+            db.session.commit()
+            return redirect('/ingredientes')
+        except:
+            return "Error modificando ingrediente"
+    else:
+        return render_template('ingredientes_modificar.html',ingredientes_to_modify=ingredientes_to_modify)
+
+
