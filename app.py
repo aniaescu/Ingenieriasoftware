@@ -1,3 +1,4 @@
+# Required libraries
 import os
 import pathlib
 import google
@@ -12,16 +13,19 @@ from pip._vendor import cachecontrol
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 
-
+# Initialize app
 app = Flask(__name__, template_folder='./templates', static_folder='./static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bocaware.db'
-#Initialize db
+
+# Initialize db
 db = SQLAlchemy(app)
 app.app_context().push()
 
+# Initialize the types of variables
 pickle_type_bocadillo = MutableDict.as_mutable(db.PickleType())
 pickle_type_pedido = MutableDict.as_mutable(db.PickleType())
 
+# Class Ingredientes
 class Ingredientes (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -29,7 +33,8 @@ class Ingredientes (db.Model):
 
     def __repr__(self):
         return self.id
-    
+
+# Class Bocadillos    
 class Bocadillos (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -39,6 +44,7 @@ class Bocadillos (db.Model):
     def __repr__(self):
         return self.id
 
+# Class Pedidos
 class Pedidos (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date_created = db.Column(db.String(50), default=datetime.utcnow().strftime('%B %d %Y - %H:%M:%S'))
@@ -46,112 +52,8 @@ class Pedidos (db.Model):
 
     def __repr__(self):
         return self.id
-
-@app.route("/")
-def index():
-    return render_template('login.html')
-
-@app.route("/ingredientes", methods=['POST', 'GET'])
-def ingredientes():
-    if request.method== 'POST':
-        ingrediente_nombre=request.form['nombre']
-        ingrediente_alergeno=request.form['alergenos']
-        nuevo_ingrediente=Ingredientes(name=ingrediente_nombre, alergico=ingrediente_alergeno)
-
-        try:
-            db.session.add(nuevo_ingrediente)
-            db.session.commit()
-            return redirect('/ingredientes')
-        except:
-            return "Error al crear ingrediente"
-    else:
-        ingredientes = Ingredientes.query.order_by(Ingredientes.id)    
-        return render_template('ingredientes.html', ingredientes=ingredientes)
     
-@app.route("/bocadillos", methods=['POST', 'GET'])
-def bocadillos():
-    ingrediente={}
-    if request.method== 'POST':
-        bocadillo_nombre=request.form['nombre']
-        bocadillo_precio=request.form['precio']
-        bocadillo_ingrediente=request.form.getlist('ingrediente')     
-        for i in bocadillo_ingrediente:
-            ingredientes = Ingredientes.query.filter_by(id=text(i))
-            for a in ingredientes:
-                ingrediente[i] = a.name
-        print(ingrediente)
-        nuevo_bocadillo=Bocadillos(name=bocadillo_nombre, precio=bocadillo_precio, ingrediente=ingrediente)
-        try:
-            db.session.add(nuevo_bocadillo)
-            db.session.commit()
-            return redirect('/bocadillos')
-        except:
-            return "Error al crear bocadillos"
-    else:
-        bocadillos = Bocadillos.query.order_by(Bocadillos.id)  
-        ingredientes = Ingredientes.query.order_by(Ingredientes.id)
-        return render_template('bocadillos.html', bocadillos=bocadillos, ingredientes=ingredientes)
-    
-@app.route("/pedidos", methods=['POST', 'GET'])
-def pedidos():
-    bocadillo={}
-    if request.method== 'POST':
-        pedido_bocadillos=request.form.getlist('bocadillo')     
-        for i in pedido_bocadillos:
-            bocadillos = Bocadillos.query.filter_by(id=text(i))
-            for a in bocadillos:
-                bocadillo[i] = a.name
-        print(bocadillo)
-        nuevo_pedido=Pedidos(bocadillos=bocadillo)
-        try:
-            db.session.add(nuevo_pedido)
-            db.session.commit()
-            return redirect('/pedidos')
-        except:
-            return "Error al crear pedido"
-    else:
-        bocadillos = Bocadillos.query.order_by(Bocadillos.id)  
-        pedidos = Pedidos.query.order_by(Pedidos.id)
-        return render_template('pedidos.html', bocadillos=bocadillos, pedidos=pedidos)
-    
-@app.route("/pedido", methods=['POST', 'GET'])
-def pr():
-    return render_template('pedidos.html', bocadillos=None, pedidos=None)
-
-
-@app.route("/ingredientes/delete/<int:id>")
-def ingre_delete(id):
-    ingre_to_delete=Ingredientes.query.get_or_404(id)
-    try:
-        db.session.delete(ingre_to_delete)
-        db.session.commit()
-        return redirect('/ingredientes')
-    except:
-        return("Error eliminando ingrediente")
-    
-@app.route("/bocadillos/delete/<int:id>")
-def boca_delete(id):
-    boca_to_delete=Bocadillos.query.get_or_404(id)
-    try:
-        db.session.delete(boca_to_delete)
-        db.session.commit()
-        return redirect('/bocadillos')
-    except:
-        return("Error eliminando bocadillo")
-    
-@app.route("/pedidos/delete/<int:id>")
-def pedido_delete(id):
-    pedido_to_delete=Pedidos.query.get_or_404(id)
-    try:
-        db.session.delete(pedido_to_delete)
-        db.session.commit()
-        return redirect('/pedidos')
-    except:
-        return("Error eliminando pedido")
-    
-
-
-
+#Google login
 app.secret_key = os.urandom(12)
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -173,14 +75,14 @@ def login_is_required(function):
             return function()
     return wrapper
 
-
+# Login route
 @app.route("/login")
 def login():
     authorization_url, state = flow.authorization_url()
     session["state"] = state
     return redirect(authorization_url)
 
-
+# Verification route
 @app.route("/callback")
 def callback():
     flow.fetch_token(authorization_response=request.url)
@@ -203,19 +105,128 @@ def callback():
     session["name"] = id_info.get("name")
     return redirect("/index")
 
-
+# Log out route
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/")
 
-@app.route("/index", methods=['GET'])
+# App routes
+# Login route
+@app.route("/")
+def log_in():
+    return render_template('login.html')
+
+# Ingredientes route that creates and lists them
+@app.route("/ingredientes", methods=['POST', 'GET'], endpoint='ingredientes')
+@login_is_required
+def ingredientes():
+    if request.method== 'POST':
+        ingrediente_nombre=request.form['nombre']
+        ingrediente_alergeno=request.form['alergenos']
+        nuevo_ingrediente=Ingredientes(name=ingrediente_nombre, alergico=ingrediente_alergeno)
+
+        try:
+            db.session.add(nuevo_ingrediente)
+            db.session.commit()
+            return redirect('/ingredientes')
+        except:
+            return "Error al crear ingrediente"
+    else:
+        ingredientes = Ingredientes.query.order_by(Ingredientes.id)    
+        return render_template('ingredientes.html', ingredientes=ingredientes)
+
+# Bocadillos route that creates and lists them    
+@app.route("/bocadillos", methods=['POST', 'GET'], endpoint='bocadillos')
+@login_is_required
+def bocadillos():
+    ingrediente={}
+    if request.method== 'POST':
+        bocadillo_nombre=request.form['nombre']
+        bocadillo_precio=request.form['precio']
+        bocadillo_ingrediente=request.form.getlist('ingrediente')     
+        for i in bocadillo_ingrediente:
+            ingredientes = Ingredientes.query.filter_by(id=text(i))
+            for a in ingredientes:
+                ingrediente[i] = a.name
+        nuevo_bocadillo=Bocadillos(name=bocadillo_nombre, precio=bocadillo_precio, ingrediente=ingrediente)
+        try:
+            db.session.add(nuevo_bocadillo)
+            db.session.commit()
+            return redirect('/bocadillos')
+        except:
+            return "Error al crear bocadillos"
+    else:
+        bocadillos = Bocadillos.query.order_by(Bocadillos.id)  
+        ingredientes = Ingredientes.query.order_by(Ingredientes.id)
+        return render_template('bocadillos.html', bocadillos=bocadillos, ingredientes=ingredientes)
+
+# Pedidos route that creates and lists them    
+@app.route("/pedidos", methods=['POST', 'GET'], endpoint='pedidos')
+@login_is_required
+def pedidos():
+    bocadillo={}
+    if request.method== 'POST':
+        pedido_bocadillos=request.form.getlist('bocadillo')     
+        for i in pedido_bocadillos:
+            bocadillos = Bocadillos.query.filter_by(id=text(i))
+            for a in bocadillos:
+                bocadillo[i] = a.name
+        nuevo_pedido=Pedidos(bocadillos=bocadillo)
+        try:
+            db.session.add(nuevo_pedido)
+            db.session.commit()
+            return redirect('/pedidos')
+        except:
+            return "Error al crear pedido"
+    else:
+        bocadillos = Bocadillos.query.order_by(Bocadillos.id)  
+        pedidos = Pedidos.query.order_by(Pedidos.id)
+        return render_template('pedidos.html', bocadillos=bocadillos, pedidos=pedidos)
+
+# Route that deletes Ingredientes
+@app.route("/ingredientes/delete/<int:id>", endpoint='ingrediente_delete')
+def ingrediente_delete(id):
+    ingre_to_delete=Ingredientes.query.get_or_404(id)
+    try:
+        db.session.delete(ingre_to_delete)
+        db.session.commit()
+        return redirect('/ingredientes')
+    except:
+        return("Error eliminando ingrediente")
+    
+# Route that deletes Bocadillos
+@app.route("/bocadillos/delete/<int:id>", endpoint='bocadillo_delete')
+def bocadillo_delete(id):
+    boca_to_delete=Bocadillos.query.get_or_404(id)
+    try:
+        db.session.delete(boca_to_delete)
+        db.session.commit()
+        return redirect('/bocadillos')
+    except:
+        return("Error eliminando bocadillo")
+    
+# Route that deletes Pedidos
+@app.route("/pedidos/delete/<int:id>", endpoint='pedido_delete')
+def pedido_delete(id):
+    pedido_to_delete=Pedidos.query.get_or_404(id)
+    try:
+        db.session.delete(pedido_to_delete)
+        db.session.commit()
+        return redirect('/pedidos')
+    except:
+        return("Error eliminando pedido")
+
+# Index route
+@app.route("/index", methods=['GET'], endpoint='index')
 @login_is_required
 def index():
     items = Bocadillos.query.order_by(Bocadillos.id)    
     return render_template('index.html', items=items)
 
-@app.route("/busqueda", methods=['POST', 'GET'])
+# Intelligent search route 
+@app.route("/busqueda", methods=['POST', 'GET'], endpoint='busqueda')
+@login_is_required
 def busqueda():
     if request.method == 'POST':
         search = request.form['buscador']
@@ -240,7 +251,9 @@ def busqueda():
         items = Bocadillos.query.order_by(Bocadillos.id)    
         return render_template('index.html', items=items)
 
-@app.route("/busqueda-ingrediente", methods=['POST', 'GET'])
+# Ingredientes search route 
+@app.route("/busqueda-ingrediente", methods=['POST', 'GET'], endpoint='busqueda_ingrediente')
+@login_is_required
 def busqueda_ingrediente():
     if request.method == 'POST':
         search = request.form['buscador']
@@ -257,8 +270,9 @@ def busqueda_ingrediente():
         ingredientes = Bocadillos.query.order_by(Bocadillos.id)    
         return render_template('ingredientes.html', ingredientes=ingredientes)
     
-
-@app.route("/busqueda-bocadillo", methods=['POST', 'GET'])
+# Bocadillos search route 
+@app.route("/busqueda-bocadillo", methods=['POST', 'GET'], endpoint='busqueda_bocadillo')
+@login_is_required
 def busqueda_bocadillo():
     if request.method == 'POST':
         search = request.form['buscador']
@@ -275,6 +289,7 @@ def busqueda_bocadillo():
         bocadillos = Bocadillos.query.order_by(Bocadillos.id)    
         return render_template('bocadillos.html', bocadillos=bocadillos)
 
+# Intelligent search function
 def similitud_palabras(palabra, lista_palabras, umbral=0.6):
     palabra = palabra.lower()
     lista_palabras_lower = [p.lower() for p in lista_palabras]
