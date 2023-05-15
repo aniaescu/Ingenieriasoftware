@@ -10,26 +10,32 @@
 </head>
 
 <body>
-    <div class="div_usuario">
-        <div class="texto_boton_usuario">
-            <p>Hola {{session['name']}}!</p>
-            <div class="div_boton_logout">
-                <a href='/'><button class="boton">Logout</button></a>
-                <br></br>
+    <div id="contenido">
+        <div class="div_usuario">
+            <div class="texto_boton_usuario">
+                <p id="mensaje_usuario">Hola {{session['name']}}!</p>
+                <div class="div_boton_logout">
+                    <a href='/'><button class="boton">Logout</button></a>
+                    <br></br>
+                </div>
             </div>
         </div>
+        
+        {% block content %}
+        {% endblock %}
+
+
     </div>
 
-    {% block content %}
-    {% endblock %}
 
     <footer>
-        <p>Autor:
-        <p><a href="mailto:ania.escudero@opendeusto.es" class="boton">Ania Escudero</a></p>
-        <p><a href="mailto:leyre.guerra@opendeusto.es" class="boton">Leyre Guerra</a></p>
-        <p><a href="mailto:unaiarevalo@opendeusto.es" class="boton">Unai Arévalo</a></p>
-        <p><a href="mailto:unai.chasco@opendeusto.es" class="boton">Unai Chasco</a></p>
-        </p>
+        <p>Autores/as:</p>
+        <div id="mailto">
+            <p class="mailto"><a href="mailto:ania.escudero@opendeusto.es" class="boton">Ania Escudero</a></p>
+            <p class="mailto"><a href="mailto:leyre.guerra@opendeusto.es" class="boton">Leyre Guerra</a></p>
+            <p class="mailto"><a href="mailto:unaiarevalo@opendeusto.es" class="boton">Unai Arévalo</a></p>
+            <p class="mailto"><a href="mailto:unai.chasco@opendeusto.es" class="boton">Unai Chasco</a></p>
+        </div>
     </footer>
 </body>
 

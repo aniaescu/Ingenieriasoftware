@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<div>
-    <h2 class="titulo">Crear nuevo pedido</h2>
+<div class="contenido_principal">
+    <a href='/index'><button class="boton">Atrás</button></a>
+    <h1>Crear nuevo pedido</h1>
     <form action="/pedidos" METHOD="POST">
         <tbody>
             <select name="bocadillo" multiple class="select_multiple">
@@ -15,11 +16,12 @@
     <br></br>
 </div>
 
-<div>
-    <h2 class="titulo">Pedidos</h2>
+<div class="contenido_principal">
+    <h1>Pedidos</h1>
     <table>
         <thead>
             <tr>
+                <th></th>
                 <th>Fecha de creación</th>
                 <th>Bocadillos</th>
             </tr>
@@ -27,17 +29,14 @@
         <tbody>
             {% for pedido in pedidos %}
             <tr>
+                <td><a href="/pedidos/delete/{{ pedido.id }}" class="boton">Eliminar</a></td>
                 <td>{{ pedido.date_created }}</td>
                 {% for a in pedido.bocadillos.values() %}
                 <td>{{ a }}</td>
                 {% endfor %}
-                <td><a href="/pedidos/delete/{{ pedido.id }}" class="boton">Eliminar</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <br></br>
-    <a href='/index'><button class="boton">Atrás</button></a>
-
 </div>
 {% endblock %}

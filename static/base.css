@@ -1,18 +1,71 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+body {
+    width: 100%;
+
+}
+
+#contenido {
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh;
+}
+
+.contenido_principal {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+}
+
+h1 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    padding-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#mensaje_usuario {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+#mailto {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.mailto {
+    margin-top: 0;
+}
+
 .boton {
-    color: #757575;
-    font-size: 20px;
+    color: black;
+    font-size: 16px;
     font-weight: 500;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .div_boton_index {
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: black;
+    padding: 10px;
+    align-items: center;
 }
 
 .div_usuario {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    background-color: darkslategray;
 }
 
 .texto_boton_usuario {
@@ -31,27 +84,26 @@ li,
 td,
 th {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .select {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .select_multiple {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    font-size: 20px;
+    font-size: 16px;
     width: 150px;
 }
 
 #caja_texto {
-    font-size: 20px;
+    font-size: 16px;
 }
 
-.titulo {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    font-size: 30px;
+table {
+    border-spacing: 20px;
 }
 
 footer {

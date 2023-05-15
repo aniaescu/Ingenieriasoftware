@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<div>
-    <h2 class="titulo">Añadir nuevo ingrediente</h2>
+<div class="contenido_principal">
+    <a href='/index'><button class="boton">Atrás</button></a>
+    <h1>Añadir nuevo ingrediente</h1>
     <form action="/ingredientes" METHOD="POST">
         <input type="text" placeholder="Nombre" name="nombre" id="caja_texto">
         <input type="text" placeholder="Alergenos" name="alergenos" id="caja_texto">
@@ -10,18 +11,19 @@
     <br></br>
 </div>
 
-<div>
-    <h2 class="titulo">Ingredientes</h2>
+<div class="contenido_principal">
+    <h1>Ingredientes</h1>
     <form name="formSearch" method="POST" action="{{ url_for('busqueda_ingrediente')}}">
         <input type="text" id="caja_texto" name="buscador" autocomplete="on">
         <button type="submit" class="boton">Buscar</button>
     </form>
 </div>
 
-<div>
+<div class="contenido_principal">
     <table>
         <thead>
             <tr>
+                <th></th>
                 <th>Nombre</th>
                 <th>Alergenos</th>
             </tr>
@@ -29,9 +31,9 @@
         <tbody>
             {% for ingrediente in ingredientes %}
             <tr>
+                <td><a href="/ingredientes/delete/{{ ingrediente.id }}" class="boton">Eliminar</a></td>
                 <td>{{ ingrediente.name }}</td>
                 <td>{{ ingrediente.alergico }}</td>
-                <td><a href="/ingredientes/delete/{{ ingrediente.id }}" class="boton">Eliminar</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -39,8 +41,5 @@
     {% if not ingredientes: %}
     No se encuentran resultados similares.
     {% endif %}
-    <br></br>
-    <a href='/index'><button class="boton">Atrás</button></a>
-
 </div>
 {% endblock %}

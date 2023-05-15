@@ -6,7 +6,7 @@
     <a href='/pedidos'><button class="boton">Crear pedido</button></a>
     <br></br>
 </div>
-<div>
+<div class="contenido_principal">
     <form name="formSearch" method="POST" action="{{ url_for('busqueda')}}">
         <input type="text" id="caja_texto" name="buscador" autocomplete="on">
         <select name="select" class="select">
@@ -16,7 +16,7 @@
         <button type="submit" class="boton">Buscar</button>
     </form>
 </div>
-<div>
+<div class="contenido_principal">
     <div>
         <ul>
             {% for item in items %}

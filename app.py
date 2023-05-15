@@ -246,7 +246,7 @@ def busqueda():
         try:
             return render_template('index.html', items=items)
         except:
-            return("Error al buscar un ingrediente")
+            return("Error al realizar la búsqueda")
     else:   
         items = Bocadillos.query.order_by(Bocadillos.id)    
         return render_template('index.html', items=items)
@@ -265,7 +265,7 @@ def busqueda_ingrediente():
         try:
             return render_template('ingredientes.html', ingredientes=ingredientes)
         except:
-            return("Error al buscar un ingrediente")
+            return("Error al realizar la búsqueda")
     else:
         ingredientes = Bocadillos.query.order_by(Bocadillos.id)    
         return render_template('ingredientes.html', ingredientes=ingredientes)
@@ -284,7 +284,7 @@ def busqueda_bocadillo():
         try:
             return render_template('bocadillos.html', bocadillos=bocadillos)
         except:
-            return("Error al buscar un ingrediente")
+            return("Error al realizar la búsqueda")
     else:
         bocadillos = Bocadillos.query.order_by(Bocadillos.id)    
         return render_template('bocadillos.html', bocadillos=bocadillos)

@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<div>
-    <h2 class="titulo">Añadir nuevo bocadillo</h2>
+<div class="contenido_principal">
+    <a href='/index'><button class="boton">Atrás</button></a>
+    <h1>Añadir nuevo bocadillo</h1>
     <form action="/bocadillos" METHOD="POST">
         <input type="text" placeholder="Nombre" name="nombre" id="caja_texto">
         <input type="text" placeholder="Precio" name="precio" id="caja_texto">
@@ -17,18 +18,19 @@
     <br></br>
 </div>
 
-<div>
-    <h2 class="titulo">Bocadillos</h2>
+<div class="contenido_principal">
+    <h1>Bocadillos</h1>
     <form name="formSearch" method="POST" action="{{ url_for('busqueda_bocadillo')}}">
         <input type="text" id="caja_texto" name="buscador" autocomplete="on">
         <button type="submit" class="boton">Buscar</button>
     </form>
 </div>
 
-<div>
+<div class="contenido_principal">
     <table>
         <thead>
             <tr>
+                <th></th>
                 <th>Nombre</th>
                 <th>Precio</th>
                 <th>Ingredientes</th>
@@ -38,13 +40,12 @@
         <tbody>
             {% for bocadillo in bocadillos %}
             <tr>
+                <td><a href="/bocadillos/delete/{{ bocadillo.id }}" class="boton">Eliminar</a></td>
                 <td>{{ bocadillo.name }}</td>
                 <td>{{ bocadillo.precio }}</td>
                 {% for a in bocadillo.ingrediente.values() %}
                 <td>{{ a }}</td>
                 {% endfor %}
-                <td><a href="/bocadillos/delete/{{ bocadillo.id }}" class="boton">Eliminar</a>
-                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -52,8 +53,6 @@
     {% if not bocadillos: %}
     No se encuentran resultados similares.
     {% endif %}
-    <br></br>
-    <a href='/index'><button class="boton">Atrás</button></a>
 </div>
 
 {% endblock %}
