@@ -15,7 +15,7 @@ from google_auth_oauthlib.flow import Flow
 
 # Initialize app
 app = Flask(__name__, template_folder='./templates', static_folder='./static')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bocaware.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/bocaware.db'
 
 # Initialize db
 db = SQLAlchemy(app)
@@ -64,7 +64,7 @@ client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secrets_file,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="https://unaiarevalo.pythonanywhere.com/callback"
+    redirect_uri="http://127.0.0.1:5000/callback"#cambiar a https://unaiarevalo.pythonanywhere.com/callback si se ejecuta en pythonanywhere
 )
 
 def login_is_required(function):
