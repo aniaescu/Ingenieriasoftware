@@ -15,7 +15,7 @@ from google_auth_oauthlib.flow import Flow
 
 # Initialize app
 app = Flask(__name__, template_folder='./templates', static_folder='./static')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/bocaware.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bocaware.db'
 
 # Initialize db
 db = SQLAlchemy(app)
